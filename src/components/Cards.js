@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 
+import './Cards.css'
+
 export default class Cards extends Component {
 
     render () {
-        console.log(this.props.result);
         return (
             <div id="cards">
-                <ul>
                 {this.props.result.map((item, i) =>
-                    <li key={i}>{item.name}</li>
+                    <div key={i} className="card">
+                        <p>{item.name}</p>
+                    </div>
                 )}
-                </ul>
             </div> 
       )
     }

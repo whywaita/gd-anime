@@ -11,7 +11,10 @@ const SCOPES = 'https://www.googleapis.com/auth/drive';
 class App extends Component {
   constructor (props) {
     super(props)
-    this.state = {gapiReady: false}
+    this.state = {
+      gapiReady: false,
+      onlyMe: false,
+    }
   }
 
   loadGoogleDriveApi() {
@@ -43,19 +46,24 @@ class App extends Component {
     } else {
       setTimeout(() => {this.initClient()}, 100);
     }
-
   };
   
   eventListen = ()=>{
-    const button = document.querySelector("button")
-    if(!button){return}
-    button.addEventListener("click", ()=>{
+    const gd_button = document.querySelector("#google-login-button")
+    if(!gd_button){return}
+    gd_button.addEventListener("click", ()=>{
       if(window.gapi.auth2.getAuthInstance().isSignedIn.get()){
         // already signedin, do nothing.
       } else {
         window.gapi.auth2.getAuthInstance().signIn();
       }
     });
+
+    const onlyme = document.querySelector("#onlyme")
+    if(!onlyme){return}
+    onlyme.addEventListener("click", () =>{
+      this.setState({ onlyMe: !this.state.onlyMe });
+    })
   }
 
   async componentDidMount() {
@@ -66,8 +74,11 @@ class App extends Component {
     return (
       <div className="App">
         <img src={logo} className="App-logo" alt="logo" />
-        <p><button className='Button ButtonPrimary'>Auth with Google</button></p>
-        <SearchBox />
+        <p>
+          <button id="google-login-button" className='Button ButtonPrimary'>Auth with Google</button>
+          <button id="onlyme" className='Button'>only me</button>
+        </p>
+        <SearchBox onlyMe={this.state.onlyMe}/>
       </div>
     );
   }

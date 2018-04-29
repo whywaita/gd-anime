@@ -12,7 +12,13 @@ export default class SearchBox extends Component {
   }
 
   searchQuery (keyword) {
-    return `name contains '${keyword}' and mimeType != 'application/vnd.google-apps.folder'`
+    var q = `name contains '${keyword}' and mimeType != 'application/vnd.google-apps.folder' and mimeType contains 'video/'`;
+
+    if (this.props.onlyMe) {
+      q = q + ` and '${window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail()}' in owners`
+    }
+
+    return q
   }
   
   search (keyword) {
@@ -35,6 +41,12 @@ export default class SearchBox extends Component {
     e.preventDefault();
     const iv = this.state.input_value;
     this.search(iv);
+  }
+
+  componentWillReceiveProps() {
+    if (this.state.input_value !== "") {
+      this.search(this.state.input_value);
+    }
   }
 
   render () {
