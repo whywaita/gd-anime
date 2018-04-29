@@ -6,7 +6,11 @@ export default class Cards extends Component {
         console.log(this.props.result);
         return (
             <div id="cards">
-            aaa
+                <ul>
+                {this.props.result.map((item, i) =>
+                    <li key={i}>{item.name}</li>
+                )}
+                </ul>
             </div> 
       )
     }
